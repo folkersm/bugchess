@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <p>hi</p>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <button onclick = "randomize()">update</button>
+    <p id = "redgreen">asasd</p>
+    <script>
+      randomattract=()=>{
+        return Math.round(Math.random()*200-100)/10
+      }
+      var rr = 0
+      var ry = 0
+      var rg = 1
+      var yy = 0
+      var yr = 0
+      var yg = 0
+      var gg = 0
+      var gy = 0
+      var gr = 0
+      var message = ""
+      function randomize() {
+        rr = randomattract()
+
+        ry = randomattract()
+        rg = randomattract()
+        yy = randomattract()
+        yr = randomattract()
+        yg = randomattract()
+        gg = randomattract()
+        gy = randomattract()
+        gr = randomattract()
+        message = "rr:" + rr +" ry:" + ry +" rg:" + rg +" yr:" + yr +" yg:" + yg +" yy:" + yy +" gr:" + gr +" gy:" + gy +" gg:" + gg
+        document.getElementById("redgreen").innerHTML = message
+
+      }
+      m = document.getElementById("canvas").getContext('2d')
+      m.fillStyle = "black"
+      m.fillRect(0,0,500,500)
+      draw=(x, y, c, s)=>{
+        m.fillStyle=c
+        m.fillRect(x, y, s, s)
+      }
+
+      particles = []
+      particle = (x, y, c)=>{
+        return{"x":x, "y":y, "vx":0, "vy":0, "color":c}
+      }
+      random=()=>{
+        return Math.random()*400+50
+      }
+
+      create=(number, color)=>{
+        group = []
+        for(let i = 0; i < number; i++){
+          group.push(particle(random(), random(), color))
+          particles.push(group[i])
+        }
+        return group
+      }
+
+      rule =(particles1, particles2, g)=> {
+        for (let i = 0; i < particles1.length; i++) {
+
+        fx = 0
+        fy = 0
+        for (let j = 0; j < particles2.length; j++) {
+          a = particles1[i]
+          b = particles2[j]
+          dx = a.x - b.x
+          dy = a.y - b.y
+          d = Math.sqrt(dx*dx + dy * dy)
+          if (d > 3){
+            F = g * 1/(d*d)
+            fx += (F * dx)
+            fy += (F * dy)
+          }
+        }
+        a.vx = (a.vx + fx)*.5
+        a.vy = (a.vy + fy)*.5
+        a.x += a.vx
+        a.y += a.vy
+        if(a.x >= canvas.width){
+          a.vx *= -1
+          a.x = canvas.width - (a.x - canvas.width)
+        }
+        if(a.y >= canvas.height){
+          a.vy *= -1
+          a.y = canvas.height - (a.y - canvas.height)
+        }
+        if(a.x <= 0){
+          a.vx *= -1
+          a.x = -a.x
+        }
+        if(a.y <= 0){
+          a.vy *= -1
+          a.y = -a.y
+        }
+      }
+      }
+
+      yellow = create(20, "yellow")
+      red = create(20, "red")
+      green = create(20, "green")
+
+      update =()=>{
+        rule(yellow, yellow, yy)
+        rule(red, yellow, ry)
+        rule(yellow, red, yr)
+        rule(red, red, rr)
+        rule(green, green, gg)
+        rule(green, yellow, gy)
+        rule(green, red, gr)
+        rule(yellow, green, yg)
+        rule(red, green, rg)
+
+
+        m.clearRect(0,0,500,500)
+        draw(0,0,"black", 500);
+        for(i=0;i<particles.length;i++){
+          draw(particles[i].x, particles[i].y,
+              particles[i].color, 5);
+        }
+        requestAnimationFrame(update);
+      }
+      update();
+
+    </script>
+  </body>
+</html>

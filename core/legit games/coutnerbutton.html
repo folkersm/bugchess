@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+
+  <body>
+    points:
+    <b id = "thing1">0</b>
+    <br>
+    <br>
+    <button onclick = "addFunction()" type="q" name="button" > add one</button>
+    <br>
+    <br>
+    <br>
+    <button onclick = "farm1Function()" type="q" name="farm1button" > farm1 each make 1/s</button> count:<b id = "farm1count">0</b> costs:<b id="farm1">25</b>
+    <br>
+    <button onclick = "farm2Function()" type="q" name="farm2button" > farm2 each make 50/s</button> count:<b id = "farm2count">0</b> costs:<b id="farm2">1000</b>
+    <br>
+    <button onclick = "farm3Function()" type="q" name="farm3button" > farm3 each make 10000/s</button> count:<b id = "farm3count">0</b> costs:<b id="farm3">250000</b>
+
+  </body>
+
+  <script type="text/javascript">
+    var farm1s = 0
+    var farm1cost = 25
+    var farm2s = 0
+    var farm2cost = 1000
+    var farm3s = 0
+    var farm3cost = 250000
+
+    var numba = 0
+
+    const changer = document.getElementById("thing1");
+
+    setInterval(add_from_farm, 200);
+
+    function add_from_farm(){
+
+      numba += farm1s;
+      numba += farm2s*50;
+      numba += farm3s*10000;
+      changer.innerHTML = numba
+    }
+    function addFunction() {
+
+      numba ++
+      changer.innerHTML = numba
+    }
+    function farm1Function() {
+      if (numba >=farm1cost) {
+      numba = numba - farm1cost
+      farm1cost = Math.round(farm1cost*1.1)
+      farm1s += 1
+      document.getElementById("farm1count").innerHTML = farm1s
+      document.getElementById("thing1").innerHTML = numba
+      document.getElementById("farm1").innerHTML = farm1cost
+    }
+    }
+    function farm2Function() {
+      if (numba >=farm2cost) {
+      numba = numba - farm2cost
+      farm2cost = Math.round(farm2cost*1.15)
+      farm2s += 1
+      document.getElementById("farm2count").innerHTML = farm2s
+      document.getElementById("thing1").innerHTML = numba
+      document.getElementById("farm2").innerHTML = farm2cost
+    }
+    }
+    function farm3Function() {
+      if (numba >=farm3cost) {
+      numba = numba - farm3cost
+      farm3cost = Math.round(farm3cost*1.2)
+      farm3s += 1
+      document.getElementById("farm3count").innerHTML = farm3s
+      document.getElementById("thing1").innerHTML = numba
+      document.getElementById("farm3").innerHTML = farm3cost
+    }
+    }
+    // var messagething = "the beacon beckons"
+    // alert(messagething)
+    //
+    // document.getElementById("thing1").innerHTML = "hat, bread";
+
+  </script>
+</html>

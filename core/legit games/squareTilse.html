@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <canvas id="canvas" width="350" height="350"></canvas>
+    <p id = "it"></p>
+    <p id = "jt"></p>
+    <script type="text/javascript">
+        var gridCornerX = 0
+        var gridCornerY = 0
+        var gridSize = 2
+        var tileSize = 44
+
+        var p = document.getElementById("canvas").getContext("2d")
+        p.fillStyle = "gray"
+        p.fillRect(gridCornerX,gridCornerY,tileSize*gridSize, tileSize*gridSize)
+        draw_line=(sx, sy, x, y, c)=>{
+          p.strokeStyle = c
+          p.beginPath();
+          p.moveTo(sx, sy);
+          p.lineTo(x, y);
+          p.stroke();
+        }
+        for (let i = 0; i <= gridSize; i++) {
+          draw_line(tileSize*i + gridCornerX, gridCornerY, tileSize*i+gridCornerX, tileSize*gridSize + gridCornerY, "red")
+          draw_line( gridCornerX, tileSize*i +gridCornerY, tileSize*gridSize+gridCornerX, tileSize*i+gridCornerY, "red")
+        }
+        words = document.querySelector('#it');
+        words2 = document.querySelector('#jt');
+        document.addEventListener('click',alert_me);
+        draw=(x, y, c, s)=>{
+          p.fillStyle=c
+          p.fillRect(x, y, s, s)
+        }
+        var hello
+        var lastx = -100
+        var lasty = -100
+        function select_tile(x,y) {
+          if (x > gridCornerX+8 && x < gridCornerX + 8 + tileSize*gridSize && y < gridCornerY + 8 + tileSize*gridSize && y > gridCornerY + 8) {
+          squareX = (Math.round((x-(gridCornerX + 8)+(tileSize/2))/tileSize))*tileSize - tileSize + (gridCornerX) + 1
+          squareY = (Math.round((y-(gridCornerY + 8)+(tileSize/2))/tileSize))*tileSize - tileSize + (gridCornerY) + 1
+          draw(lastx, lasty, "gray", tileSize-2)
+          draw(squareX, squareY, "black", tileSize-2)
+          lastx = squareX
+          lasty = squareY
+        }
+        }
+        function alert_me(e) {
+          var adjustedClientX = e.clientX -(gridCornerX + 8)
+          var adjustedClientY = e.clientY -(gridCornerY + 8)
+          words2.innerText = `(${Math.round((e.clientX+5)/tileSize)},${Math.round((e.clientY+5)/tileSize)})`;
+          words.innerText = `(${e.clientX},${e.clientY})`;
+          select_tile(e.clientX, e.clientY)
+        }
+
+//(${Math.round((e.clientX-10)/30)},${Math.round((e.clientY-10)/30)})
+
+
+
+    </script>
+  </body>
+</html>

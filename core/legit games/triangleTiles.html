@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <canvas id="canvas" width="700" height="700"></canvas>
+    <p id = "it"></p>
+    <p id = "jt"></p>
+    <p id = "pt"></p>
+    <script type="text/javascript">
+        var gridCornerX = 0
+        var gridCornerY = 0
+        var gridSize = 10
+        var tileSize = 44
+
+        var p = document.getElementById("canvas").getContext("2d")
+        p.fillStyle = "gray"
+        p.rotate(0*Math.PI/180)
+        draw_triangle=(y1, y2, x1, x2, c)=>{
+          p.fillStyle = c
+          p.beginPath();
+          p.moveTo(x1, y1)
+          p.lineTo((x1+x2)/2, y2)
+          p.lineTo(x2, y1)
+          p.fill()
+        }
+        draw_triangle(0, gridSize*tileSize, 0, gridSize*tileSize*(2/Math.sqrt(3)), "gray")
+
+        draw_line=(sx, sy, x, y, c)=>{
+          p.strokeStyle = c
+          p.beginPath();
+          p.moveTo(sx, sy);
+          p.lineTo(x, y);
+          p.stroke();
+        }
+        for (let i = 0; i <= gridSize; i++) {
+          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, (2*tileSize/Math.sqrt(3))*i + gridCornerX + (gridSize*tileSize/Math.sqrt(3)), tileSize*gridSize + gridCornerY, "red")
+          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, (2*tileSize/Math.sqrt(3))*i + gridCornerX - (gridSize*tileSize/Math.sqrt(3)), tileSize*gridSize + gridCornerY, "red")
+          draw_line( gridCornerX, tileSize*i +gridCornerY, tileSize*gridSize+gridCornerX, tileSize*i+gridCornerY, "red")
+        }
+        words = document.querySelector('#it');
+        words2 = document.querySelector('#jt');
+        words1 = document.querySelector('#pt');
+        document.addEventListener('click',alert_me);
+        draw=(x, y, c, s)=>{
+          p.fillStyle=c
+          p.fillRect(x, y, s, s)
+        }
+        var hello
+        var last1 = -100
+        var last2 = -100
+        var last3 = -100
+        function select_tile(x,y) {
+
+          locator1 = (y-gridCornerY-8)/Math.sqrt(3)+x-gridCornerX-8
+          locator2 = -(y-gridCornerY-8)/(Math.sqrt(3))+x-gridCornerX - 8
+          locator3 = y-gridCornerY - 8
+
+          snappedLocator1 = Math.round((locator1-tileSize/Math.sqrt(3))/(2*tileSize/Math.sqrt(3)))
+          snappedLocator2 = Math.round((locator2-tileSize/Math.sqrt(3))/(2*tileSize/Math.sqrt(3)))
+          snappedLocator3 = Math.round((locator3-tileSize/2)/tileSize)
+
+          if (snappedLocator3 >= 0 && snappedLocator3 < gridSize && snappedLocator2 >= 0 && snappedLocator2 < gridSize && snappedLocator1 >= 0 && snappedLocator1 < gridSize) {
+
+          words.innerText = `${snappedLocator1}`
+          words2.innerText = `${snappedLocator2}`
+          words1.innerText = `${snappedLocator3}`
+
+
+
+          if ((snappedLocator1 + snappedLocator2+snappedLocator3) % 2 == 0) {
+
+          draw_triangle(snappedLocator3*tileSize+2, (snappedLocator3+1)*tileSize-3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")
+          }
+          else {draw_triangle((snappedLocator3+1)*tileSize-2, (snappedLocator3)*tileSize+3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")}
+          if ((last1 + last2+last3) % 2 == 0) {
+
+          draw_triangle(last3*tileSize+2, (last3+1)*tileSize-2, (last1+last2)*tileSize/Math.sqrt(3)+2, (last1+last2+2)*tileSize/Math.sqrt(3)-2, "grey")
+          }
+          else {draw_triangle((last3+1)*tileSize-2, (last3)*tileSize+2, (last1+last2)*tileSize/Math.sqrt(3)+2, (last1+last2+2)*tileSize/Math.sqrt(3)-2, "grey")}
+
+          // draw(lastx, lasty, "gray", tileSize-2)
+          // draw(squareX, squareY, "black", tileSize-2)
+          words.innerText = "ok"
+          last1 = snappedLocator1
+          last2 = snappedLocator2
+          last3 = snappedLocator3
+        }
+      }
+        function alert_me(e) {
+          var adjustedClientX = e.clientX -(gridCornerX + 8)
+          var adjustedClientY = e.clientY -(gridCornerY + 8)
+          // words2.innerText = `(${Math.round((e.clientX+5)/tileSize)},${Math.round((e.clientY+5)/tileSize)})`;
+          // words.innerText = `(${e.clientX},${e.clientY})`;
+          select_tile(e.clientX, e.clientY)
+        }
+
+//(${Math.round((e.clientX-10)/30)},${Math.round((e.clientY-10)/30)})
+
+
+
+    </script>
+  </body>
+</html>
