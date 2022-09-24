@@ -18,12 +18,13 @@
         var p = document.getElementById("canvas").getContext("2d")
         p.fillStyle = "gray"
         p.rotate(0*Math.PI/180)
+
         draw_triangle=(y1, y2, x1, x2, c)=>{
           p.fillStyle = c
           p.beginPath();
-          p.moveTo(x1, y1)
-          p.lineTo((x1+x2)/2, y2)
-          p.lineTo(x2, y1)
+          p.moveTo(x1 + gridCornerX, y1 + gridCornerY)
+          p.lineTo((x1+x2 + gridCornerX + gridCornerX)/2, y2 + gridCornerY)
+          p.lineTo(x2 + gridCornerX, y1 + gridCornerY)
           p.fill()
         }
         draw_triangle(0, gridSize*tileSize, 0, gridSize*tileSize*(2/Math.sqrt(3)), "gray")
@@ -36,9 +37,9 @@
           p.stroke();
         }
         for (let i = 0; i <= gridSize; i++) {
-          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, (2*tileSize/Math.sqrt(3))*i + gridCornerX + (gridSize*tileSize/Math.sqrt(3)), tileSize*gridSize + gridCornerY, "red")
-          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, (2*tileSize/Math.sqrt(3))*i + gridCornerX - (gridSize*tileSize/Math.sqrt(3)), tileSize*gridSize + gridCornerY, "red")
-          draw_line( gridCornerX, tileSize*i +gridCornerY, tileSize*gridSize+gridCornerX, tileSize*i+gridCornerY, "red")
+          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, gridSize*tileSize/Math.sqrt(3) + i*tileSize/Math.sqrt(3), tileSize*(gridSize-i) + gridCornerY, "red")
+          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, gridCornerX + i*tileSize/Math.sqrt(3), tileSize*i + gridCornerY, "red")
+          draw_line( gridCornerX + i*tileSize/Math.sqrt(3), tileSize*i +gridCornerY, (2*tileSize/Math.sqrt(3))*(gridSize-i/2), tileSize*i+gridCornerY, "red")
         }
         words = document.querySelector('#it');
         words2 = document.querySelector('#jt');
@@ -69,32 +70,35 @@
           words1.innerText = `${snappedLocator3}`
 
 
-
-          if ((snappedLocator1 + snappedLocator2+snappedLocator3) % 2 == 0) {
-
-          draw_triangle(snappedLocator3*tileSize+2, (snappedLocator3+1)*tileSize-3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")
-          }
-          else {draw_triangle((snappedLocator3+1)*tileSize-2, (snappedLocator3)*tileSize+3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")}
           if ((last1 + last2+last3) % 2 == 0) {
 
           draw_triangle(last3*tileSize+2, (last3+1)*tileSize-2, (last1+last2)*tileSize/Math.sqrt(3)+2, (last1+last2+2)*tileSize/Math.sqrt(3)-2, "grey")
           }
           else {draw_triangle((last3+1)*tileSize-2, (last3)*tileSize+2, (last1+last2)*tileSize/Math.sqrt(3)+2, (last1+last2+2)*tileSize/Math.sqrt(3)-2, "grey")}
 
+          if ((snappedLocator1 + snappedLocator2+snappedLocator3) % 2 == 0) {
+
+          draw_triangle(snappedLocator3*tileSize+2, (snappedLocator3+1)*tileSize-3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")
+          }
+          else {draw_triangle((snappedLocator3+1)*tileSize-2, (snappedLocator3)*tileSize+3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")}
+
           // draw(lastx, lasty, "gray", tileSize-2)
           // draw(squareX, squareY, "black", tileSize-2)
-          words.innerText = "ok"
+
           last1 = snappedLocator1
           last2 = snappedLocator2
           last3 = snappedLocator3
         }
       }
+
+
         function alert_me(e) {
-          var adjustedClientX = e.clientX -(gridCornerX + 8)
-          var adjustedClientY = e.clientY -(gridCornerY + 8)
+          var BB = canvas.getBoundingClientRect();
+          var adjustedClientX = e.screenX -(gridCornerX + 8)
+          var adjustedClientY = e.screenY -(gridCornerY + 8)
           // words2.innerText = `(${Math.round((e.clientX+5)/tileSize)},${Math.round((e.clientY+5)/tileSize)})`;
           // words.innerText = `(${e.clientX},${e.clientY})`;
-          select_tile(e.clientX, e.clientY)
+          select_tile(e.clientX - BB.left + 8, e.clientY-BB.top + 8)
         }
 
 //(${Math.round((e.clientX-10)/30)},${Math.round((e.clientY-10)/30)})
