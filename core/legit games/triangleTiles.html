@@ -11,9 +11,9 @@
     <p id = "pt"></p>
     <script type="text/javascript">
         var gridCornerX = 0
-        var gridCornerY = 0
-        var gridSize = 10
-        var tileSize = 44
+        var gridCornerY = 300
+        var gridSize = 6
+        var tileSize = 33
 
         var p = document.getElementById("canvas").getContext("2d")
         p.fillStyle = "gray"
@@ -37,9 +37,10 @@
           p.stroke();
         }
         for (let i = 0; i <= gridSize; i++) {
-          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, gridSize*tileSize/Math.sqrt(3) + i*tileSize/Math.sqrt(3), tileSize*(gridSize-i) + gridCornerY, "red")
-          draw_line((2*tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY, gridCornerX + i*tileSize/Math.sqrt(3), tileSize*i + gridCornerY, "red")
+          draw_line((tileSize/Math.sqrt(3))*i + gridCornerX, gridCornerY-tileSize*(i), gridSize*tileSize/Math.sqrt(3) + i*tileSize/Math.sqrt(3), tileSize*(gridSize-i) + gridCornerY, "red")
+          draw_line((tileSize/Math.sqrt(3))*i + gridCornerX+tileSize*gridSize/Math.sqrt(3), gridCornerY-tileSize*(gridSize-i), gridCornerX + i*tileSize/Math.sqrt(3), tileSize*i + gridCornerY, "red")
           draw_line( gridCornerX + i*tileSize/Math.sqrt(3), tileSize*i +gridCornerY, (2*tileSize/Math.sqrt(3))*(gridSize-i/2), tileSize*i+gridCornerY, "red")
+          draw_line( gridCornerX + i*tileSize/Math.sqrt(3), -tileSize*i +gridCornerY, (2*tileSize/Math.sqrt(3))*(gridSize-i/2), -tileSize*i+gridCornerY, "red")
         }
         words = document.querySelector('#it');
         words2 = document.querySelector('#jt');
