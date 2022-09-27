@@ -5,6 +5,7 @@
     <title></title>
   </head>
   <body>
+    <img src="images/mite.png" alt="asdf">
     <canvas id="canvas" width="700" height="700"></canvas>
     <p id = "it"></p>
     <p id = "jt"></p>
@@ -15,10 +16,22 @@
         var gridSize = 6
         var tileSize = 33
 
+        gamepieces = [""]
+        gameBoard = []
+        for (i=0; i<=gridSize;i++){
+          for (var j = 0; j < array.length; j++) {
+            for (var k = 0; k < array.length; i++) {
+              gameBoard.push([])
+            }
+          }
+        }
+        function draw_piece(x, y, z, name) {
+
+        }
         var p = document.getElementById("canvas").getContext("2d")
         p.fillStyle = "gray"
         p.rotate(0*Math.PI/180)
-
+// I lost all my senses but two, work and pleasure.
         draw_triangle=(y1, y2, x1, x2, c)=>{
           p.fillStyle = c
           p.beginPath();
@@ -57,6 +70,7 @@
         var last3 = -100
         function select_tile(x,y) {
 
+
           locator1 = (y-gridCornerY-8)/Math.sqrt(3)+x-gridCornerX-8 // converting x y coordinates to 3 dimensional coordinates to represent the trianglular grid.
           locator2 = -(y-gridCornerY-8)/(Math.sqrt(3))+x-gridCornerX - 8// this piece of code preps the x y coordinates to adjust for canvas offset
           locator3 = y-gridCornerY - 8
@@ -64,6 +78,11 @@
           snappedLocator1 = Math.round((locator1-tileSize/Math.sqrt(3))/(2*tileSize/Math.sqrt(3))) // divides by the size of the tiles and rounds to the nearest whole number,
           snappedLocator2 = Math.round((locator2-tileSize/Math.sqrt(3))/(2*tileSize/Math.sqrt(3))) // so everywhere you click in the tile outputs the same coordinate for that tile
           snappedLocator3 = Math.round((locator3-tileSize/2)/tileSize)
+
+          selection_color = "blue"
+          if (gameBoard[snappedLocator1][snappedLocator2][snappedLocator3] != 0) {
+            selection_color = "pink"
+          }
 
           if (snappedLocator3 < gridSize && snappedLocator2 >= 0 && snappedLocator2 < gridSize && snappedLocator1 >= 0 && snappedLocator1 < gridSize) {
 
@@ -80,9 +99,9 @@
 
           if ((snappedLocator1 + snappedLocator2+snappedLocator3) % 2 == 0) {
 
-          draw_triangle(snappedLocator3*tileSize+2, (snappedLocator3+1)*tileSize-3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")
+          draw_triangle(snappedLocator3*tileSize+2, (snappedLocator3+1)*tileSize-3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, selection_color)
           }
-          else {draw_triangle((snappedLocator3+1)*tileSize-2, (snappedLocator3)*tileSize+3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, "blue")}
+          else {draw_triangle((snappedLocator3+1)*tileSize-2, (snappedLocator3)*tileSize+3, (snappedLocator1+snappedLocator2)*tileSize/Math.sqrt(3)+3, (snappedLocator1+snappedLocator2+2)*tileSize/Math.sqrt(3)-3, selection_color)}
 
           // draw(lastx, lasty, "gray", tileSize-2)
           // draw(squareX, squareY, "black", tileSize-2)
